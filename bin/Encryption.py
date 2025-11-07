@@ -4,8 +4,6 @@ def encrypt(plain_text: str, key: str, level: str):
     
     if level == "Lvl. 1":
         encrypted_text = level_one_convert(plain_text, key)
-    elif level == "Vernam":
-        encrypted_text = vernam_encrypt(plain_text, key)
     else:
         encrypted_text = level_two_convert(plain_text, key)
 
@@ -23,8 +21,6 @@ def decrypt(encrypted_text: str, encryption_key: str, level: str):
 
     if level == "Lvl. 1":
         plain_text = level_one_convert(encrypted_text, decryption_key)
-    elif level == "Vernam":
-        plain_text = vernam_decrypt(encrypted_text, decryption_key)
     else:
         plain_text = level_two_convert(encrypted_text, decryption_key)
 
@@ -105,7 +101,7 @@ def level_two_convert(text_in: str, key: str):
 
     return encrypted_text
 
-def vernam_encrypt(plain, key):
+def vernam_toggle(plain, key):
     alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
     cypher = ""
 
@@ -119,7 +115,7 @@ def vernam_encrypt(plain, key):
         else:
             key_index = i
 
-        key_index = alphabet.index(plain[key_index])
+        key_index = alphabet.index(key[key_index])
 
         plain_index = list(f'{plain_index:08b}')
         key_index = list(f'{key_index:08b}')
@@ -134,11 +130,3 @@ def vernam_encrypt(plain, key):
         cypher = f"{cypher}{alphabet[new_index]}"
 
     return cypher
-
-def vernam_decrypt(cypher, key):
-    plain = ""
-
-    for cypher_i, key_i in zip(cypher, key):
-        plain = f"{plain}{chr(ord(cypher_i) ^ ord(key_i))}"
-
-    return plain
