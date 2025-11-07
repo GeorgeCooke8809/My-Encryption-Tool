@@ -9,7 +9,7 @@ while True:
 
     level_given = False
     while level_given == False:
-        print("1. Level 1 Encryption \n2. Level 2 Encryption")
+        print("1. Level 1 Encryption \n2. Level 2 Encryption\n3. Vernam Encryption")
         level = input()
 
         if level == "1":
@@ -17,6 +17,9 @@ while True:
             level_given = True
         elif level == "2":
             level = "Lvl. 2"
+            level_given = True
+        elif level == "3":
+            level = "Vernam"
             level_given = True
         else:
             print("That is an invalid level. Try again.")
