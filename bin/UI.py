@@ -89,165 +89,7 @@ def func_save_file(widget_canvas, widget_key_box, widget_encryption_type): # Sav
     if file_path != "":
         file_rw = open(file_path, "w")
         file_rw.write(encrypted_text)
-        file_rw.close()
-
-def func_lvl_one_encryptor_input_change(event): # Triggered when the text is changed in any of the input boxes - generates new encrypted text
-    plain_text = widget_text_in.get(0.0, 'end')
-    encryption_key = widget_key_box.get()
-
-    encrypted_text = Encryption.encrypt(plain_text, encryption_key, "Lvl. 1")
-
-    widget_text_out.delete(0.0, 'end')
-    widget_text_out.insert(0.0, encrypted_text)
-
-def func_lvl_two_encryptor_input_change(event): # Triggered when the text is changed in any of the input boxes - generates new encrypted text
-    plain_text = widget_text_in.get(0.0, 'end')
-    encryption_key = widget_key_box.get()
-
-    encrypted_text = Encryption.encrypt(plain_text, encryption_key, "Lvl. 2")
-
-    widget_text_out.delete(0.0, 'end')
-    widget_text_out.insert(0.0, encrypted_text)
-
-def func_lvl_one_encryptor_output_change(event):
-    encrypted_text = widget_text_out.get(0.0, 'end')
-    encryption_key = widget_key_box.get()
-
-    plain_text = Encryption.decrypt(encrypted_text, encryption_key, "Lvl. 1")
-
-    widget_text_in.delete(0.0, 'end')
-    widget_text_in.insert(0.0, plain_text)
-
-def func_lvl_two_encryptor_output_change(event):
-    encrypted_text = widget_text_out.get(0.0, 'end')
-    encryption_key = widget_key_box.get()
-
-    plain_text = Encryption.decrypt(encrypted_text, encryption_key, "Lvl. 2")
-
-    widget_text_in.delete(0.0, 'end')
-    widget_text_in.insert(0.0, plain_text)
-
-def lvl_1_page(content):
-    global widget_text_in, widget_key_box, widget_text_out
-
-    content.destroy()
-
-    menu_frame.rowconfigure(0, weight = 1, minsize = 20)
-    menu_frame.rowconfigure(1, weight = 100000, minsize = 20)
-    menu_frame.columnconfigure(0, weight = 9)
-    menu_frame.columnconfigure(1, weight = 1)
-
-    content = customtkinter.CTkFrame(menu_frame, fg_color = "transparent")
-
-    content.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
-
-    content.rowconfigure(0, weight = 1, minsize = 40)
-    content.rowconfigure(1, weight = 1, minsize = 15)
-    content.rowconfigure(2, weight = 100000, minsize = 40)
-    content.rowconfigure(3, weight = 2, minsize = 20)
-    content.rowconfigure(4, weight = 1, minsize = 15)
-    content.rowconfigure(5, weight = 100000, minsize = 40)
-    content.rowconfigure(6, weight = 1)
-
-    content.columnconfigure(0, weight = 1)
-
-    key_frame = customtkinter.CTkFrame(content, fg_color = "transparent")
-    key_frame.columnconfigure(0)
-    key_frame.columnconfigure(1)
-
-    level_label = customtkinter.CTkLabel(content, text = "Level 1 Encryption:", font = ("TkDefaultFont", 30, 'bold'))
-    level_label.grid(row = 0, column = 0, columnspan = 1, sticky = "nsw", padx = 10, pady = 10)
-
-    text_in_label = customtkinter.CTkLabel(content, text = "Plain Text In:", font = ("TkDefaultFont", 15))
-    text_in_label.grid(row = 1, column = 0, columnspan = 1, sticky = "nsw", padx = 10)
-
-    widget_text_in = customtkinter.CTkTextbox(content, wrap = "word")
-    widget_text_in.bind('<KeyRelease>', func_lvl_one_encryptor_input_change)
-    widget_text_in.grid(row = 2, column = 0, columnspan = 1, sticky = "nsew", padx = 10)
-
-
-    key_label = customtkinter.CTkLabel(key_frame, text = "Key:", font = ("TkDefaultFont", 15))
-    key_label.grid(row = 0, column = 0, columnspan = 1, sticky = "nse", padx = 5)
-
-    key = StringVar()
-    key.trace("w", lambda name, index, mode, key=key: func_lvl_one_encryptor_input_change(""))
-
-    widget_key_box = customtkinter.CTkEntry(key_frame, placeholder_text = "Key", font = ("TkDefaultFont", 20), width = 400, textvariable = key)
-    widget_key_box.grid(row = 0, column = 1, padx = 5, sticky = "nsw")
-
-    key_frame.grid(row = 3, column = 0, pady = 10)
-
-
-    text_out_label = customtkinter.CTkLabel(content, text = "Encrypted Text Out:", font = ("TkDefaultFont", 15))
-    text_out_label.grid(row = 4, column = 0, columnspan = 1, sticky = "nsw", padx = 10)
-
-    widget_text_out = customtkinter.CTkTextbox(content, wrap = "word")
-    widget_text_out.bind('<KeyRelease>', func_lvl_one_encryptor_output_change)
-    widget_text_out.grid(row = 5, column = 0, columnspan = 1, rowspan = 1, sticky = "nsew", padx = 10)
-
-    spacing_label = customtkinter.CTkLabel(content, text = "", font = ("TkDefaultFont", 1))
-    spacing_label.grid(row = 6, column = 0, columnspan = 1, sticky = "nsw", padx = 10)
-
-def lvl_2_page(content):
-    global widget_text_in, widget_key_box, widget_text_out
-
-    content.destroy()
-
-    menu_frame.rowconfigure(0, weight = 1, minsize = 20)
-    menu_frame.rowconfigure(1, weight = 100000, minsize = 20)
-    menu_frame.columnconfigure(0, weight = 9)
-    menu_frame.columnconfigure(1, weight = 1)
-
-    content = customtkinter.CTkFrame(menu_frame, fg_color = "transparent")
-
-    content.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
-
-    content.rowconfigure(0, weight = 1, minsize = 40)
-    content.rowconfigure(1, weight = 1, minsize = 15)
-    content.rowconfigure(2, weight = 100000, minsize = 40)
-    content.rowconfigure(3, weight = 2, minsize = 20)
-    content.rowconfigure(4, weight = 1, minsize = 15)
-    content.rowconfigure(5, weight = 100000, minsize = 40)
-    content.rowconfigure(6, weight = 1)
-
-    content.columnconfigure(0, weight = 1)
-
-    key_frame = customtkinter.CTkFrame(content, fg_color = "transparent")
-    key_frame.columnconfigure(0)
-    key_frame.columnconfigure(1)
-
-    level_label = customtkinter.CTkLabel(content, text = "Level 2 Encryption:", font = ("TkDefaultFont", 30, 'bold'))
-    level_label.grid(row = 0, column = 0, columnspan = 1, sticky = "nsw", padx = 10, pady = 10)
-
-    text_in_label = customtkinter.CTkLabel(content, text = "Plain Text In:", font = ("TkDefaultFont", 15))
-    text_in_label.grid(row = 1, column = 0, columnspan = 1, sticky = "nsw", padx = 10)
-
-    widget_text_in = customtkinter.CTkTextbox(content, wrap = "word")
-    widget_text_in.bind('<KeyRelease>', func_lvl_two_encryptor_input_change)
-    widget_text_in.grid(row = 2, column = 0, columnspan = 1, sticky = "nsew", padx = 10)
-
-
-    key_label = customtkinter.CTkLabel(key_frame, text = "Key:", font = ("TkDefaultFont", 15))
-    key_label.grid(row = 0, column = 0, columnspan = 1, sticky = "nse", padx = 5)
-
-    key = StringVar()
-    key.trace("w", lambda name, index, mode, key=key: func_lvl_two_encryptor_input_change("nah"))
-
-    widget_key_box = customtkinter.CTkEntry(key_frame, placeholder_text = "Key", font = ("TkDefaultFont", 20), width = 400, textvariable = key)
-    widget_key_box.grid(row = 0, column = 1, padx = 5, sticky = "nsw")
-
-    key_frame.grid(row = 3, column = 0, pady = 10)
-
-
-    text_out_label = customtkinter.CTkLabel(content, text = "Encrypted Text Out:", font = ("TkDefaultFont", 15))
-    text_out_label.grid(row = 4, column = 0, columnspan = 1, sticky = "nsw", padx = 10)
-
-    widget_text_out = customtkinter.CTkTextbox(content, wrap = "word")
-    widget_text_out.bind('<KeyRelease>', func_lvl_two_encryptor_output_change)
-    widget_text_out.grid(row = 5, column = 0, columnspan = 1, rowspan = 1, sticky = "nsew", padx = 10)
-
-    spacing_label = customtkinter.CTkLabel(content, text = "", font = ("TkDefaultFont", 1))
-    spacing_label.grid(row = 6, column = 0, columnspan = 1, sticky = "nsw", padx = 10)
+        file_rw.close()   
 
 def note_page(content):
     file_path = ""
@@ -288,42 +130,148 @@ def note_page(content):
     middle_filler.grid(row = 0, column = 3, sticky = "nse", padx = 10)
 
 
-def switch_page(button_position):
-    if button_position == "Lvl. 1":
-        lvl_1_page(content)
-    elif button_position == "Lvl. 2":
-        lvl_2_page(content)
-    elif button_position == "Notepad":
-        note_page(content)
+class App(customtkinter.CTk):
+    def __init__(self):
+        super().__init__()
+
+        self.geometry("1000x600")
+        self.minsize(width = 900, height = 350)
+        self.title("OOP Encryptor - By George A.C. Cooke")
+
+        self.master_frame = MasterFrame(self)
+
+        self.mainloop()
+
+class MasterFrame(customtkinter.CTkFrame):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.create_widgets()
+
+        self.pack(anchor = "center", expand = True, fill = "both")
+
+    def create_widgets(self):
+        self.widget_menu_buttons = customtkinter.CTkSegmentedButton(self, values = ["Lvl. 1", "Lvl. 2", "Lvl. 3", "Notepad"], command  = self.switch_page, font = ("TkDefaultFont", 20))
+        self.widget_menu_buttons.set("Lvl. 1")
+
+        self.content = Basic(self, "Lvl. 1")
+
+        self.draw_widgets()
+
+    def draw_widgets(self):
+        self.rowconfigure(0, weight = 1, minsize = 20)
+        self.rowconfigure(1, weight = 100000, minsize = 80)
+        self.columnconfigure(0, weight = 9)
+        self.columnconfigure(1, weight = 1)
+
+        self.widget_menu_buttons.grid(row = 0, column = 0, sticky = "nsw", padx = 10, pady = 10)
+        self.content.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
+
+    def switch_page(self, value = None): # TODO: don't know how to clear window for new page
+        page = self.widget_menu_buttons.get()
+        self.content.destroy()
+
+        if page in ["Lvl. 1", "Lvl. 2"]:
+            self.content = Basic(self, page)
+
+class Basic(customtkinter.CTkFrame):
+    def __init__(self, parent, form):
+        super().__init__(parent)
+        self.form = form
+
+        self.create_widgets()
+
+        self.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
+
+    def create_widgets(self):
+        if self.form == "Lvl. 1":
+            self.level_label = customtkinter.CTkLabel(self, text = "Level 1 Encryption - Caesar:", font = ("TkDefaultFont", 30, 'bold'))
+        elif self.form == "Lvl. 2":
+            self.level_label = customtkinter.CTkLabel(self, text = "Level 2 Encryption - Directional Polyshift:", font = ("TkDefaultFont", 30, 'bold'))
+
+        self.text_in_label = customtkinter.CTkLabel(self, text = "Plain Text In:", font = ("TkDefaultFont", 15))
+
+        self.widget_text_in = customtkinter.CTkTextbox(self, wrap = "word")
+        self.widget_text_in.bind('<KeyRelease>', self.input_change)
+
+        self.key_frame = customtkinter.CTkFrame(self, fg_color = "transparent")
+        self.key_frame.columnconfigure(0)
+        self.key_frame.columnconfigure(1)
+
+        self.key_label = customtkinter.CTkLabel(self.key_frame, text = "Key:", font = ("TkDefaultFont", 15))
+        self.key_label.grid(row = 0, column = 0, columnspan = 1, sticky = "nse", padx = 5)
+
+        self.key = StringVar()
+        self.key.trace("w", lambda name, index, mode, key=self.key: self.input_change())
+
+        self.widget_key_box = customtkinter.CTkEntry(self.key_frame, placeholder_text = "Key", font = ("TkDefaultFont", 20), width = 400, textvariable = self.key)
+        self.widget_key_box.grid(row = 0, column = 1, padx = 5, sticky = "nsw")
+
+        
+        self.text_out_label = customtkinter.CTkLabel(self, text = "Encrypted Text Out:", font = ("TkDefaultFont", 15))
+        self.widget_text_out = customtkinter.CTkTextbox(self, wrap = "word")
+        self.widget_text_out.bind('<KeyRelease>', self.output_change)
+
+        self.draw_widgets()
+
+    def draw_widgets(self):
+        self.rowconfigure(0, weight = 1, minsize = 40)
+        self.rowconfigure(1, weight = 1, minsize = 15)
+        self.rowconfigure(2, weight = 100000, minsize = 40)
+        self.rowconfigure(3, weight = 2, minsize = 20)
+        self.rowconfigure(4, weight = 1, minsize = 15)
+        self.rowconfigure(5, weight = 100000, minsize = 40)
+
+        self.columnconfigure(0, weight = 1)
+
+        self.level_label.grid(row = 0, column = 0, columnspan = 1, sticky = "nsw", padx = 10, pady = 10)
+        self.text_in_label.grid(row = 1, column = 0, columnspan = 1, sticky = "nsw", padx = 10)
+        self.widget_text_in.grid(row = 2, column = 0, columnspan = 1, sticky = "nsew", padx = 10)
+
+        self.key_frame.grid(row = 3, column = 0, pady = 10)
+
+        self.text_out_label.grid(row = 4, column = 0, columnspan = 1, sticky = "nsw", padx = 10)
+        self.widget_text_out.grid(row = 5, column = 0, columnspan = 1, rowspan = 1, sticky = "nsew", padx = 10)
+
+        self.configure(fg_color = "transparent")
+
+    def input_change(self, value = None):
+        plain_text = self.widget_text_in.get(0.0, 'end')
+        encryption_key = self.widget_key_box.get()
+
+        if self.form == "Lvl. 1":
+            encrypted_text = Encryption.decrypt(plain_text, encryption_key, "Lvl. 1")
+        elif self.form == "Lvl. 2":
+            encrypted_text = Encryption.decrypt(plain_text, encryption_key, "Lvl. 2")
+
+        self.widget_text_out.delete(0.0, 'end')
+        self.widget_text_out.insert(0.0, encrypted_text)
+
+    def output_change(self, value = None):
+        encrypted_text = self.widget_text_out.get(0.0, 'end')
+        encryption_key = self.widget_key_box.get()
+
+        if self.form == "Lvl. 1":
+            plain_text = Encryption.decrypt(encrypted_text, encryption_key, "Lvl. 1")
+        elif self.form == "Lvl. 2":
+            plain_text = Encryption.decrypt(encrypted_text, encryption_key, "Lvl. 2")
+
+        self.widget_text_in.delete(0.0, 'end')
+        self.widget_text_in.insert(0.0, plain_text)
+
+class Notepad(customtkinter.CTkFrame):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+    def create_widgets(self):
+        pass
+
+    def draw_widgets(self):
+        pass
+
 
 customtkinter.set_appearance_mode("dark")
 
-root = customtkinter.CTk()
-root.geometry("1000x600")
-root.minsize(width = 900, height = 350)
-root.title("Encryptor - By George A.C. Cooke")
-
-menu_frame = customtkinter.CTkFrame(root)
-
-menu_frame.rowconfigure(0, weight = 1, minsize = 20)
-menu_frame.rowconfigure(1, weight = 100000, minsize = 80)
-menu_frame.columnconfigure(0, weight = 9)
-menu_frame.columnconfigure(1, weight = 1)
-
-content = customtkinter.CTkFrame(menu_frame)
-
-content.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
-
-widget_menu_buttons = customtkinter.CTkSegmentedButton(menu_frame, values = ["Lvl. 1", "Lvl. 2", "Notepad"], command  = switch_page, font = ("TkDefaultFont", 20))
-widget_menu_buttons.set("Lvl. 1")
-widget_menu_buttons.grid(row = 0, column = 0, sticky = "nsw", padx = 10, pady = 10)
-
-
-lvl_1_page(content)
-
-
-menu_frame.pack(anchor = "center", expand = True, fill = "both")
-
 file_path = ""
 
-root.mainloop()
+App()
