@@ -24,12 +24,7 @@ while True:
         else:
             print("That is an invalid level. Try again.")
 
-    if level in ["Lvl. 1", "Lvl. 2"]:
-        if choice == "1": # Encrypt
-            print(Encryption.encrypt(text_in, key, level))
-        elif choice == "2": # Decrypt
-            print(Encryption.decrypt(text_in, key, level))
-        else:
-            print("That is an invalid encryption/decryption choice. Try again.")
-    else:
-        print(Encryption.vernam_toggle(text_in, key))
+    if choice == "1": # Encrypt
+        print(Encryption.encrypt(text_in, key, level))
+    elif choice == "2": # Decrypt
+        print(Encryption.decrypt(text_in, key, level))
