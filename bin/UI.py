@@ -203,17 +203,17 @@ class Notepad(customtkinter.CTkFrame):
 
 
     def save_file(self): # TODO: Implement this
-        plain_text = widget_canvas.get(0.0, 'end')
-        encryption_key = widget_key_box.get()
-        encryption_type = widget_encryption_type.get()
+        plain_text = self.widget_canvas.get(0.0, 'end')
+        encryption_key = self.widget_key_box.get()
+        encryption_type = self.widget_encryption_type.get()
 
         encrypted_text = Encryption.encrypt(plain_text, encryption_key, encryption_type)
 
-        if file_path == "": # If file has ! been created or opened --> will need to save new file location and make it
-            file_path = filedialog.asksaveasfilename(initialdir = "C:\\", title = "Save As Encrypted Text File", filetypes = (("Text File", "*.txt"), ))
+        if self.file_path == "": # If file has ! been created or opened --> will need to save new file location and make it
+            self.file_path = filedialog.asksaveasfilename(initialdir = "C:\\", title = "Save As Encrypted Text File", filetypes = (("Text File", "*.txt"), ))
 
-        if file_path != "":
-            file_rw = open(file_path, "w")
+        if self.file_path != "":
+            file_rw = open(self.file_path, "w")
             file_rw.write(encrypted_text)
             file_rw.close()
 
