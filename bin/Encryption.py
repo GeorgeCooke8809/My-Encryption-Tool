@@ -101,7 +101,7 @@ def level_two_convert(text_in: str, key: str):
 
     return encrypted_text
 
-def vernam_toggle(plain, key):
+def vernam_toggle(plain: str, key: str):
     alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
     cypher = ""
 

@@ -4,9 +4,6 @@ import ctypes
 from tkinter import *
 import Encryption
 
-def INOP(function):
-    ctypes.windll.user32.MessageBoxW(0, f"This feature is currently INOP. {function = }", "WARNING:", 0)
-
 def func_new_file(canvas, key_box): # Create new file button in notepad page
     global file_path
 
