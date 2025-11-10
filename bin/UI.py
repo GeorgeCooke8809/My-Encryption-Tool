@@ -24,7 +24,7 @@ class MasterFrame(customtkinter.CTkFrame):
         self.pack(anchor = "center", expand = True, fill = "both")
 
     def create_widgets(self):
-        self.widget_menu_buttons = customtkinter.CTkSegmentedButton(self, values = ["Lvl. 1", "Lvl. 2", "Lvl. 3", "Notepad"], command  = self.switch_page, font = ("TkDefaultFont", 20))
+        self.widget_menu_buttons = customtkinter.CTkSegmentedButton(self, values = ["Lvl. 1", "Lvl. 2", "Vernam", "Notepad"], command  = self.switch_page, font = ("TkDefaultFont", 20))
         self.widget_menu_buttons.set("Lvl. 1")
 
         self.content = Basic(self, "Lvl. 1")
@@ -44,7 +44,7 @@ class MasterFrame(customtkinter.CTkFrame):
         page = self.widget_menu_buttons.get()
         self.content.destroy()
 
-        if page in ["Lvl. 1", "Lvl. 2"]:
+        if page in ["Lvl. 1", "Lvl. 2", "Vernam"]:
             self.content = Basic(self, page)
         elif page == "Notepad":
             self.content = Notepad(self)
@@ -63,6 +63,8 @@ class Basic(customtkinter.CTkFrame):
             self.level_label = customtkinter.CTkLabel(self, text = "Level 1 Encryption - Caesar:", font = ("TkDefaultFont", 30, 'bold'))
         elif self.form == "Lvl. 2":
             self.level_label = customtkinter.CTkLabel(self, text = "Level 2 Encryption - Directional Polyshift:", font = ("TkDefaultFont", 30, 'bold'))
+        elif self.form == "Vernam":
+            self.level_label = customtkinter.CTkLabel(self, text = "Vernam Cypher:", font = ("TkDefaultFont", 30, 'bold'))
 
         self.text_in_label = customtkinter.CTkLabel(self, text = "Plain Text In:", font = ("TkDefaultFont", 15))
 
@@ -114,10 +116,7 @@ class Basic(customtkinter.CTkFrame):
         plain_text = self.widget_text_in.get(0.0, 'end')
         encryption_key = self.widget_key_box.get()
 
-        if self.form == "Lvl. 1":
-            encrypted_text = Encryption.decrypt(plain_text, encryption_key, "Lvl. 1")
-        elif self.form == "Lvl. 2":
-            encrypted_text = Encryption.decrypt(plain_text, encryption_key, "Lvl. 2")
+        encrypted_text = Encryption.decrypt(plain_text, encryption_key, self.form)
 
         self.widget_text_out.delete(0.0, 'end')
         self.widget_text_out.insert(0.0, encrypted_text)
@@ -126,10 +125,7 @@ class Basic(customtkinter.CTkFrame):
         encrypted_text = self.widget_text_out.get(0.0, 'end')
         encryption_key = self.widget_key_box.get()
 
-        if self.form == "Lvl. 1":
-            plain_text = Encryption.decrypt(encrypted_text, encryption_key, "Lvl. 1")
-        elif self.form == "Lvl. 2":
-            plain_text = Encryption.decrypt(encrypted_text, encryption_key, "Lvl. 2")
+        plain_text = Encryption.decrypt(encrypted_text, encryption_key, self.form)
 
         self.widget_text_in.delete(0.0, 'end')
         self.widget_text_in.insert(0.0, plain_text)
@@ -147,7 +143,7 @@ class Notepad(customtkinter.CTkFrame):
     def create_widgets(self):
         self.widget_canvas = customtkinter.CTkTextbox(self, wrap = "word")
         self.widget_key_box = customtkinter.CTkEntry(self, placeholder_text = "Key", font = ("TkDefaultFont", 20), width = 400)
-        self.widget_encryption_type = customtkinter.CTkOptionMenu(self, values = ["Lvl. 1", "Lvl. 2"], font = ("TkDefaultFont", 20))
+        self.widget_encryption_type = customtkinter.CTkOptionMenu(self, values = ["Lvl. 1", "Lvl. 2", "Vernam"], font = ("TkDefaultFont", 20))
         self.widget_new_file_button = customtkinter.CTkButton(self, text = "New File", font = ("TkDefaultFont", 20), command = self.new_file)
         self.widget_open_file_button = customtkinter.CTkButton(self, text = "Open File", font = ("TkDefaultFont", 20), command = self.open_file)
         self.widget_save_file_button = customtkinter.CTkButton(self, text = "Save File", font = ("TkDefaultFont", 20), command = self.save_file)
@@ -202,7 +198,7 @@ class Notepad(customtkinter.CTkFrame):
 
 
 
-    def save_file(self): # TODO: Implement this
+    def save_file(self):
         plain_text = self.widget_canvas.get(0.0, 'end')
         encryption_key = self.widget_key_box.get()
         encryption_type = self.widget_encryption_type.get()

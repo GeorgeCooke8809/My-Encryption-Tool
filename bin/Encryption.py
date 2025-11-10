@@ -4,6 +4,8 @@ def encrypt(plain_text: str, key: str, level: str):
     
     if level == "Lvl. 1":
         encrypted_text = level_one_convert(plain_text, key)
+    elif level == "Vernam":
+        encrypted_text = vernam_toggle(plain_text, key)
     else:
         encrypted_text = level_two_convert(plain_text, key)
 
@@ -21,6 +23,8 @@ def decrypt(encrypted_text: str, encryption_key: str, level: str):
 
     if level == "Lvl. 1":
         plain_text = level_one_convert(encrypted_text, decryption_key)
+    elif level == "Vernam":
+        plain_text = vernam_toggle(encrypted_text, encryption_key)
     else:
         plain_text = level_two_convert(encrypted_text, decryption_key)
 
@@ -102,6 +106,8 @@ def level_two_convert(text_in: str, key: str):
     return encrypted_text
 
 def vernam_toggle(plain: str, key: str):
+    if key == "":
+        key = "a"
     alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
     cypher = ""
 
@@ -109,24 +115,28 @@ def vernam_toggle(plain: str, key: str):
     length_key = len(key)
 
     for i in range(length_plain):
-        plain_index = alphabet.index(plain[i])
-        if i > length_key-1:
-            key_index = i % length_key
-        else:
-            key_index = i
+        try:
+            plain_index = alphabet.index(plain[i])
+            if i > length_key-1:
+                key_index = i % length_key
+            else:
+                key_index = i
 
-        key_index = alphabet.index(key[key_index])
+            key_index = alphabet.index(key[key_index])
 
-        plain_index = list(f'{plain_index:08b}')
-        key_index = list(f'{key_index:08b}')
+            plain_index = list(f'{plain_index:08b}')
+            key_index = list(f'{key_index:08b}')
 
-        letter = ""
+            letter = ""
 
-        for i in range(8):
-            temp = int(plain_index[i]) ^ int(key_index[i])
-            letter = f"{letter}{temp}"
+            for i in range(8):
+                temp = int(plain_index[i]) ^ int(key_index[i])
+                letter = f"{letter}{temp}"
 
-        new_index = int(letter, 2)
-        cypher = f"{cypher}{alphabet[new_index]}"
+            new_index = int(letter, 2)
+            cypher = f"{cypher}{alphabet[new_index]}"
+            
+        except:
+            cypher = f"{cypher}{plain[i]}"
 
     return cypher
