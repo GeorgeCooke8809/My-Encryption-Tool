@@ -91,45 +91,6 @@ def func_save_file(widget_canvas, widget_key_box, widget_encryption_type): # Sav
         file_rw.write(encrypted_text)
         file_rw.close()   
 
-def note_page(content):
-    file_path = ""
-
-    content.destroy()
-    content = customtkinter.CTkFrame(menu_frame, fg_color = "transparent")
-    content.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
-
-    content.rowconfigure(0, weight = 1, minsize = 20)
-    content.rowconfigure(1, weight = 10000)
-
-    content.columnconfigure(0, weight = 1, minsize = 120)
-    content.columnconfigure(1, weight = 1, minsize = 120)
-    content.columnconfigure(2, weight = 1, minsize = 120)
-    content.columnconfigure(3, weight = 1000000, minsize = 75)
-    content.columnconfigure(4, weight = 1, minsize = 300)
-    content.columnconfigure(5, weight = 1, minsize = 120)
-
-    canvas = customtkinter.CTkTextbox(content, wrap = "word")
-    canvas.grid(row = 1, column = 0, columnspan = 6, rowspan = 1, sticky = "nsew", padx = 10, pady = 10)
-
-    widget_key_box = customtkinter.CTkEntry(content, placeholder_text = "Key", font = ("TkDefaultFont", 20), width = 400)
-    widget_key_box.grid(row = 0, column = 4, sticky = "nsew")
-
-    widget_encryption_type = customtkinter.CTkOptionMenu(content, values = ["Lvl. 1", "Lvl. 2"], font = ("TkDefaultFont", 20))
-    widget_encryption_type.grid(row = 0, column = 5, sticky = "nsew", padx = 10)
-
-    widget_new_file_button = customtkinter.CTkButton(content, text = "New File", font = ("TkDefaultFont", 20), command = lambda: func_new_file(canvas, widget_key_box))
-    widget_new_file_button.grid(row = 0, column = 0, sticky = "nsew", padx = 10)
-
-    widget_open_file_button = customtkinter.CTkButton(content, text = "Open File", font = ("TkDefaultFont", 20), command = lambda: func_open_file(canvas, widget_key_box, widget_encryption_type))
-    widget_open_file_button.grid(row = 0, column = 1, sticky = "nsew")
-
-    widget_save_file_button = customtkinter.CTkButton(content, text = "Save File", font = ("TkDefaultFont", 20), command = lambda: func_save_file(canvas, widget_key_box, widget_encryption_type))
-    widget_save_file_button.grid(row = 0, column = 2, sticky = "nsew", padx = 10)
-
-    middle_filler = customtkinter.CTkLabel(content, text = "Key:", font = ("TkDefaultFont", 20))
-    middle_filler.grid(row = 0, column = 3, sticky = "nse", padx = 10)
-
-
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -167,12 +128,14 @@ class MasterFrame(customtkinter.CTkFrame):
         self.widget_menu_buttons.grid(row = 0, column = 0, sticky = "nsw", padx = 10, pady = 10)
         self.content.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
 
-    def switch_page(self, value = None): # TODO: don't know how to clear window for new page
+    def switch_page(self, value = None):
         page = self.widget_menu_buttons.get()
         self.content.destroy()
 
         if page in ["Lvl. 1", "Lvl. 2"]:
             self.content = Basic(self, page)
+        elif page == "Notepad":
+            self.content = Notepad(self)
 
 class Basic(customtkinter.CTkFrame):
     def __init__(self, parent, form):
@@ -263,15 +226,55 @@ class Notepad(customtkinter.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
 
+        self.file_path = ""
+
+        self.create_widgets()
+
+        self.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
+
     def create_widgets(self):
-        pass
+        self.canvas = customtkinter.CTkTextbox(self, wrap = "word")
+        self.widget_key_box = customtkinter.CTkEntry(self, placeholder_text = "Key", font = ("TkDefaultFont", 20), width = 400)
+        self.widget_encryption_type = customtkinter.CTkOptionMenu(self, values = ["Lvl. 1", "Lvl. 2"], font = ("TkDefaultFont", 20))
+        self.widget_new_file_button = customtkinter.CTkButton(self, text = "New File", font = ("TkDefaultFont", 20), command = self.new_file)
+        self.widget_open_file_button = customtkinter.CTkButton(self, text = "Open File", font = ("TkDefaultFont", 20), command = self.open_file)
+        self.widget_save_file_button = customtkinter.CTkButton(self, text = "Save File", font = ("TkDefaultFont", 20), command = self.save_file)
+        self.middle_filler = customtkinter.CTkLabel(self, text = "Key:", font = ("TkDefaultFont", 20))
+        
+        self.draw_widgets()
 
     def draw_widgets(self):
+        self.rowconfigure(0, weight = 1, minsize = 20)
+        self.rowconfigure(1, weight = 10000)
+
+        self.columnconfigure(0, weight = 1, minsize = 120)
+        self.columnconfigure(1, weight = 1, minsize = 120)
+        self.columnconfigure(2, weight = 1, minsize = 120)
+        self.columnconfigure(3, weight = 1000000, minsize = 75)
+        self.columnconfigure(4, weight = 1, minsize = 300)
+        self.columnconfigure(5, weight = 1, minsize = 120)
+
+        self.canvas.grid(row = 1, column = 0, columnspan = 6, rowspan = 1, sticky = "nsew", padx = 10, pady = 10)
+        self.widget_key_box.grid(row = 0, column = 4, sticky = "nsew")
+        self.widget_encryption_type.grid(row = 0, column = 5, sticky = "nsew", padx = 10)
+        self.widget_new_file_button.grid(row = 0, column = 0, sticky = "nsew", padx = 10)
+        self.widget_open_file_button.grid(row = 0, column = 1, sticky = "nsew")
+        self.widget_save_file_button.grid(row = 0, column = 2, sticky = "nsew", padx = 10)
+        self.middle_filler.grid(row = 0, column = 3, sticky = "nse", padx = 10)
+
+        self.configure(fg_color = "transparent")
+
+
+    def new_file(self): # TODO: Implement this
+        pass
+
+    def open_file(self): # TODO: Implement this
+        pass
+
+    def save_file(self): # TODO: Implement this
         pass
 
 
 customtkinter.set_appearance_mode("dark")
-
-file_path = ""
 
 App()
