@@ -1,25 +1,7 @@
 import customtkinter
 from tkinter import filedialog
-import ctypes
 from tkinter import *
 import Encryption
-
-def func_new_file(canvas, key_box): # Create new file button in notepad page
-    global file_path
-
-    file = filedialog.asksaveasfilename(initialdir = "C:\\", title = "Create Encrypted Text File", filetypes = (("Text File", "*.txt"), ))
-
-    try:
-        file_path = file + ".txt"
-        file_rw = open(file_path, "w")
-        file_rw.close()
-
-        canvas.delete(0.0, 'end')
-        key_box.delete()
-    except:
-        file_path = ""
-
-
 
 def func_open_file(widget_canvas, widget_key_box, widget_encryption_type): # Open file button in notepad page
     global file_path
@@ -266,7 +248,17 @@ class Notepad(customtkinter.CTkFrame):
 
 
     def new_file(self): # TODO: Implement this
-        pass
+        file = filedialog.asksaveasfilename(initialdir = "C:\\", title = "Create Encrypted Text File", filetypes = (("Text File", "*.txt"), ))
+
+        try:
+            self.file_path = file + ".txt"
+            file_rw = open(file_path, "w")
+            file_rw.close()
+
+            self.canvas.delete(0.0, 'end')
+            self.key_box.delete()
+        except:
+            self.file_path = ""
 
     def open_file(self): # TODO: Implement this
         pass
