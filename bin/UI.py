@@ -4,6 +4,9 @@ from tkinter import *
 import Encryption   
 
 class App(customtkinter.CTk):
+    """
+    This class is used to make the main window within which the rest of the app is housed.
+    """
     def __init__(self):
         super().__init__()
 
@@ -16,22 +19,26 @@ class App(customtkinter.CTk):
         self.mainloop()
 
 class MasterFrame(customtkinter.CTkFrame):
-    def __init__(self, parent):
+    """
+    This class houses the frame that is passed directly in to the main window and has the navigation menu at the top.
+    It also houses the logic needed to switch between pages when the navigation menu is used.
+    """
+    def __init__(self, parent): # Basic Initialization
         super().__init__(parent)
 
         self.create_widgets()
 
         self.pack(anchor = "center", expand = True, fill = "both")
 
-    def create_widgets(self):
-        self.widget_menu_buttons = customtkinter.CTkSegmentedButton(self, values = ["Lvl. 1", "Lvl. 2", "Vernam", "Notepad"], command  = self.switch_page, font = ("TkDefaultFont", 20))
-        self.widget_menu_buttons.set("Lvl. 1")
+    def create_widgets(self): # Make the widgets that will later be drawn to the window
+        self.widget_menu_buttons = customtkinter.CTkSegmentedButton(self, values = ["Directional Caesar", "Directional Polyshift", "Vernam", "Notepad"], command  = self.switch_page, font = ("TkDefaultFont", 20))
+        self.widget_menu_buttons.set("Directional Caesar")
 
-        self.content = Basic(self, "Lvl. 1")
+        self.content = Basic(self, "Directional Caesar")
 
         self.draw_widgets()
 
-    def draw_widgets(self):
+    def draw_widgets(self): # Draw the widgets and display them on the window
         self.rowconfigure(0, weight = 1, minsize = 20)
         self.rowconfigure(1, weight = 100000, minsize = 80)
         self.columnconfigure(0, weight = 9)
@@ -40,17 +47,21 @@ class MasterFrame(customtkinter.CTkFrame):
         self.widget_menu_buttons.grid(row = 0, column = 0, sticky = "nsw", padx = 10, pady = 10)
         self.content.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
 
-    def switch_page(self, value = None):
+    def switch_page(self, value = None): # Handles the logic of switching between different pages
         page = self.widget_menu_buttons.get()
         self.content.destroy()
 
-        if page in ["Lvl. 1", "Lvl. 2", "Vernam"]:
+        if page in ["Directional Caesar", "Directional Polyshift", "Vernam"]:
             self.content = Basic(self, page)
         elif page == "Notepad":
             self.content = Notepad(self)
 
 class Basic(customtkinter.CTkFrame):
-    def __init__(self, parent, form):
+    """
+    This class houses the windows for each of the sandbox pages and draws them to the window.
+    Housed within it is also the logic for updating the input and output boxes when one of them is changed.
+    """
+    def __init__(self, parent, form): # Basic initialization
         super().__init__(parent)
         self.form = form
 
@@ -58,11 +69,12 @@ class Basic(customtkinter.CTkFrame):
 
         self.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
 
-    def create_widgets(self):
-        if self.form == "Lvl. 1":
-            self.level_label = customtkinter.CTkLabel(self, text = "Level 1 Encryption - Caesar:", font = ("TkDefaultFont", 30, 'bold'))
-        elif self.form == "Lvl. 2":
-            self.level_label = customtkinter.CTkLabel(self, text = "Level 2 Encryption - Directional Polyshift:", font = ("TkDefaultFont", 30, 'bold'))
+    def create_widgets(self): # Create the widgets to later be drawn
+        # The following selections change the header based on the encryption method being used
+        if self.form == "Directional Caesar":
+            self.level_label = customtkinter.CTkLabel(self, text = "Directional Caesar Encryption:", font = ("TkDefaultFont", 30, 'bold'))
+        elif self.form == "Directional Polyshift":
+            self.level_label = customtkinter.CTkLabel(self, text = "Directional Polyshift Encryption:", font = ("TkDefaultFont", 30, 'bold'))
         elif self.form == "Vernam":
             self.level_label = customtkinter.CTkLabel(self, text = "Vernam Cypher:", font = ("TkDefaultFont", 30, 'bold'))
 
@@ -91,7 +103,7 @@ class Basic(customtkinter.CTkFrame):
 
         self.draw_widgets()
 
-    def draw_widgets(self):
+    def draw_widgets(self): # Draws the widgets and displays them on the window
         self.rowconfigure(0, weight = 1, minsize = 40)
         self.rowconfigure(1, weight = 1, minsize = 15)
         self.rowconfigure(2, weight = 100000, minsize = 40)
@@ -112,7 +124,7 @@ class Basic(customtkinter.CTkFrame):
 
         self.configure(fg_color = "transparent")
 
-    def input_change(self, value = None):
+    def input_change(self, value = None): # Is triggered when the input or key is changed to update the output box
         plain_text = self.widget_text_in.get(0.0, 'end')
         encryption_key = self.widget_key_box.get()
 
@@ -121,7 +133,7 @@ class Basic(customtkinter.CTkFrame):
         self.widget_text_out.delete(0.0, 'end')
         self.widget_text_out.insert(0.0, encrypted_text)
 
-    def output_change(self, value = None):
+    def output_change(self, value = None): # Is triggered when the output box is changed and updates the input box
         encrypted_text = self.widget_text_out.get(0.0, 'end')
         encryption_key = self.widget_key_box.get()
 
@@ -131,7 +143,11 @@ class Basic(customtkinter.CTkFrame):
         self.widget_text_in.insert(0.0, plain_text)
 
 class Notepad(customtkinter.CTkFrame):
-    def __init__(self, parent):
+    """
+    This class houses the window for the notepad page of the app which saves and reads encrypted text from .txt files.
+    Also housed within this class is the logic of opening, saving, and creating the .txt files.
+    """
+    def __init__(self, parent): # Basic initialization
         super().__init__(parent)
 
         self.file_path = ""
@@ -140,10 +156,10 @@ class Notepad(customtkinter.CTkFrame):
 
         self.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
 
-    def create_widgets(self):
+    def create_widgets(self): # Creates the widgets which will later be drawn to the window
         self.widget_canvas = customtkinter.CTkTextbox(self, wrap = "word")
         self.widget_key_box = customtkinter.CTkEntry(self, placeholder_text = "Key", font = ("TkDefaultFont", 20), width = 400)
-        self.widget_encryption_type = customtkinter.CTkOptionMenu(self, values = ["Lvl. 1", "Lvl. 2", "Vernam"], font = ("TkDefaultFont", 20))
+        self.widget_encryption_type = customtkinter.CTkOptionMenu(self, values = ["Directional Caesar", "Directional Polyshift", "Vernam"], font = ("TkDefaultFont", 20))
         self.widget_new_file_button = customtkinter.CTkButton(self, text = "New File", font = ("TkDefaultFont", 20), command = self.new_file)
         self.widget_open_file_button = customtkinter.CTkButton(self, text = "Open File", font = ("TkDefaultFont", 20), command = self.open_file)
         self.widget_save_file_button = customtkinter.CTkButton(self, text = "Save File", font = ("TkDefaultFont", 20), command = self.save_file)
@@ -151,7 +167,7 @@ class Notepad(customtkinter.CTkFrame):
         
         self.draw_widgets()
 
-    def draw_widgets(self):
+    def draw_widgets(self): # Draws the widgets to the window to be displayed on the screen.
         self.rowconfigure(0, weight = 1, minsize = 20)
         self.rowconfigure(1, weight = 10000)
 
@@ -173,7 +189,7 @@ class Notepad(customtkinter.CTkFrame):
         self.configure(fg_color = "transparent")
 
 
-    def new_file(self):
+    def new_file(self): # Triggered when the "New File" button in pressed in the notepad page, asks user for file location then creates new file
         file = filedialog.asksaveasfilename(initialdir = "C:\\", title = "Create Encrypted Text File", filetypes = (("Text File", "*.txt"), ))
 
         try:
@@ -183,10 +199,10 @@ class Notepad(customtkinter.CTkFrame):
 
             self.canvas.delete(0.0, 'end')
             self.key_box.delete()
-        except:
+        except: # Triggered when user closes file selection window without choosing
             self.file_path = ""
 
-    def open_file(self):
+    def open_file(self): # Triggered when "Open" button is pressed in the notepad page, asks user for file location then moves on to asking for decryption key
         self.file_path = filedialog.askopenfilename(initialdir = "C:\\", title = "Create Encrypted Text File", filetypes = (("Text File", "*.txt"), ))
         file_rw = open(self.file_path, "r+")
 
@@ -196,28 +212,30 @@ class Notepad(customtkinter.CTkFrame):
 
         self.key_request_box = OpenFileKeyRequest(self)
 
-
-
-    def save_file(self):
+    def save_file(self): # Triggered when "Save" button is pressed, overwrites old data in file with new encrypted text.
         plain_text = self.widget_canvas.get(0.0, 'end')
         encryption_key = self.widget_key_box.get()
         encryption_type = self.widget_encryption_type.get()
 
         encrypted_text = Encryption.encrypt(plain_text, encryption_key, encryption_type)
 
-        if self.file_path == "": # If file has ! been created or opened --> will need to save new file location and make it
+        if self.file_path == "": # If file has not been created or opened --> will need to save new file location and make it
             self.file_path = filedialog.asksaveasfilename(initialdir = "C:\\", title = "Save As Encrypted Text File", filetypes = (("Text File", "*.txt"), ))
 
-        if self.file_path != "":
+        if self.file_path != "": # Still necessary if user closes create file window before entering location and name
             file_rw = open(self.file_path, "w")
             file_rw.write(encrypted_text)
             file_rw.close()
 
 class OpenFileKeyRequest(customtkinter.CTkToplevel):
-    def __init__(self, master):
+    """
+    Window used to ask the user for the encryption key when opening an encrypted text file.
+    Triggered in "open_file" function of "Notepad" class.
+    """
+    def __init__(self, master): # Basic initialization
         super().__init__()
 
-        self.master = master
+        self.master = master # Refers to master class (Notepad) so that data can be pushed into it
 
         self.title("Submit File Encryption Key:")
         self.minsize(300, 100)
@@ -227,16 +245,16 @@ class OpenFileKeyRequest(customtkinter.CTkToplevel):
 
         self.mainloop()
 
-    def create_widgets(self):
+    def create_widgets(self): # Creates the basic widgets to later be drawn to the screen
         self.key_request_frame = customtkinter.CTkFrame(self, fg_color = "transparent")
         self.widget_key_request_box = customtkinter.CTkEntry(self.key_request_frame, placeholder_text = "Encryption Key")
-        self.widget_encryption_type_select = customtkinter.CTkOptionMenu(self.key_request_frame, values = ["Lvl. 1", "Lvl. 2", "Vernam"])
+        self.widget_encryption_type_select = customtkinter.CTkOptionMenu(self.key_request_frame, values = ["Directional Caesar", "Directional Polyshift", "Vernam"])
         self.widget_submit_key_button = customtkinter.CTkButton(self.key_request_frame, text = "Continue", command = self.open_file_submit_key)
         self.widget_submit_key_button.grid(pady = 10, row = 1, column = 0, columnspan = 2, sticky = "nesw")
 
         self.draw_widgets()
 
-    def draw_widgets(self):
+    def draw_widgets(self): # Draws the widgets already made to the screen
         self.key_request_frame.rowconfigure((0,1), weight = 1)
 
         self.key_request_frame.columnconfigure(0, weight = 3)
@@ -248,7 +266,7 @@ class OpenFileKeyRequest(customtkinter.CTkToplevel):
 
         self.key_request_frame.pack(padx = 10, pady = 10, anchor = "center", expand = True, fill = "both")
 
-    def open_file_submit_key(self):
+    def open_file_submit_key(self): # Triggered when "Continue" button is pressed, uses the specified key to decrypt the encrypted .txt file and push it into the canvas
         encryption_key = self.widget_key_request_box.get()
         encryption_type = self.widget_encryption_type_select.get()
 
