@@ -1,8 +1,8 @@
 def encrypt(plain_text: str, key: str, level: str):
-    if key == "":
+    if key == "" and level != "Vernam":
         key = "L0"
     
-    if level == "Lvl. 1":
+    if level == "Directional Caesar":
         encrypted_text = level_one_convert(plain_text, key)
     elif level == "Vernam":
         encrypted_text = vernam_toggle(plain_text, key)
@@ -21,7 +21,7 @@ def decrypt(encrypted_text: str, encryption_key: str, level: str):
         else:
             decryption_key = "R" + encryption_key[1:]
 
-    if level == "Lvl. 1":
+    if level == "Directional Caesar":
         plain_text = level_one_convert(encrypted_text, decryption_key)
     elif level == "Vernam":
         plain_text = vernam_toggle(encrypted_text, encryption_key)
@@ -31,9 +31,9 @@ def decrypt(encrypted_text: str, encryption_key: str, level: str):
     return plain_text
 
 def encrypt_alphabet(direction: str, amount: int):
-    plain_alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ",", ".", "'", '"', ";", ":", "(", ")", "!", "$", "%", "&", "-", "_", "?", " "]
+    plain_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
 
-    amount = amount % 78
+    amount = amount % 88
     new_alphabet = []
     new_alphabet.extend(plain_alphabet)
 
@@ -49,7 +49,10 @@ def encrypt_alphabet(direction: str, amount: int):
     return new_alphabet
 
 def level_one_convert(text_in: str, key: str):
-    plain_alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ",", ".", "'", '"', ";", ":", "(", ")", "!", "$", "%", "&", "-", "_", "?", " "]
+    """
+    Also called "Directional Caesar"
+    """
+    plain_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
 
     try:
         encryption_direction = key[0]
@@ -73,8 +76,11 @@ def level_one_convert(text_in: str, key: str):
     return encrypted_text
 
 def level_two_convert(text_in: str, key: str):
+    """
+    Also called "Directional Polyshift"
+    """
     index = 0
-    plain_alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ",", ".", "'", '"', ";", ":", "(", ")", "!", "$", "%", "&", "-", "_", "?", " "]
+    plain_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
 
     encrypted_text = ""
 
