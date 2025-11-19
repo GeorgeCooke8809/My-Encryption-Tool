@@ -32,6 +32,7 @@ class MasterFrame(customtkinter.CTkFrame):
 
     def create_widgets(self): # Make the widgets that will later be drawn to the window
         self.widget_menu_buttons = customtkinter.CTkSegmentedButton(self, values = ["Directional Caesar", "Directional Polyshift", "Vernam", "Notepad"], command  = self.switch_page, font = ("TkDefaultFont", 20))
+        self.widget_menu_buttons.set("Directional Caesar")
 
         self.content = Basic(self, "Directional Caesar")
 
