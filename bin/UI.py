@@ -1,7 +1,7 @@
 import customtkinter
 from tkinter import filedialog
 from tkinter import *
-import Encryption   
+import Encryption  
 
 class App(customtkinter.CTk):
     """
@@ -11,7 +11,7 @@ class App(customtkinter.CTk):
         super().__init__()
 
         self.geometry("1000x600")
-        self.minsize(width = 900, height = 350)
+        self.minsize(width = 700, height = 350)
         self.title("OOP Encryptor - By George A.C. Cooke")
 
         self.master_frame = MasterFrame(self)

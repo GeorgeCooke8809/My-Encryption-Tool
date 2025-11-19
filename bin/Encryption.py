@@ -51,6 +51,18 @@ def encrypt_alphabet(direction: str, amount: int):
 def level_one_convert(text_in: str, key: str):
     """
     Also called "Directional Caesar"
+
+    PROCESS caesar convert (plain text, encryption key)
+        SET direction = encryption key [0]
+        SET magnitude = encryption key [1::]
+        SET new alphabet = alphabet shifted magnitude in direction
+
+        FOR letter in plain text:
+            SET new letter = new alphabet [index(letter)]
+            SET encrypted text = encrypted text + new letter
+
+        PRINT encrypted text
+    END
     """
     plain_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
 
@@ -78,6 +90,17 @@ def level_one_convert(text_in: str, key: str):
 def level_two_convert(text_in: str, key: str):
     """
     Also called "Directional Polyshift"
+
+    PROCESS directional polyshift (plain text, encryption key)
+        SET direction = encryption key [0]
+        FOR index in length of plain text:
+            SET key index = index MOD length(encryption key) - 1
+            SET magnitude = key [key index]
+            SET new alphabet = alphabet shifted direction by magnitude
+            SET new letter = new alphabet [index(letter)]
+            SET encrypted text = encrypted text + new letter
+        PRINT encrypted text
+    END
     """
     index = 0
     plain_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
@@ -112,6 +135,19 @@ def level_two_convert(text_in: str, key: str):
     return encrypted_text
 
 def vernam_toggle(plain: str, key: str):
+    """
+    PROCESS vernam toggle (plain text, encryption key)
+        FOR index in length(plain text);
+            SET key index = index MOD length(encryption key)
+            SET key letter = key [key index]
+            SET key value = binary(key letter index in alphabet)
+            SET current letter = binary(plain text [index])
+            SET new index = integer(key value XOR current letter)
+            SET new letter = alphabet [new index]
+            SET encrypted text = encrypted text + new letter
+        PRINT encrypted text
+    END
+    """
     if key == "":
         key = "a"
     alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
