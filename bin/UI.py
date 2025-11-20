@@ -1,6 +1,7 @@
 import customtkinter
 from tkinter import filedialog
 from tkinter import *
+from matplotlib import pyplot as plt
 import Encryption  
 
 class App(customtkinter.CTk):
@@ -34,6 +35,8 @@ class MasterFrame(customtkinter.CTkFrame):
         self.widget_menu_buttons = customtkinter.CTkSegmentedButton(self, values = ["Directional Caesar", "Directional Polyshift", "Vernam", "Notepad"], command  = self.switch_page, font = ("TkDefaultFont", 20))
         self.widget_menu_buttons.set("Directional Caesar")
 
+        self.widget_learn_more = customtkinter.CTkButton(self, text = "Learn More", font = ("TkDefaultFont", 20), command = ...) # TODO: add command
+
         self.content = Basic(self, "Directional Caesar")
 
         self.draw_widgets()
@@ -45,6 +48,7 @@ class MasterFrame(customtkinter.CTkFrame):
         self.columnconfigure(1, weight = 1)
 
         self.widget_menu_buttons.grid(row = 0, column = 0, sticky = "nsw", padx = 10, pady = 10)
+        self.widget_learn_more.grid(row = 0, column = 1, sticky = "nsew")
         self.content.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
 
     def switch_page(self, value = None): # Handles the logic of switching between different pages
@@ -86,6 +90,7 @@ class Basic(customtkinter.CTkFrame):
         self.key_frame = customtkinter.CTkFrame(self, fg_color = "transparent")
         self.key_frame.columnconfigure(0)
         self.key_frame.columnconfigure(1)
+        self.key_frame.columnconfigure(3)
 
         self.key_label = customtkinter.CTkLabel(self.key_frame, text = "Key:", font = ("TkDefaultFont", 15))
         self.key_label.grid(row = 0, column = 0, columnspan = 1, sticky = "nse", padx = 5)
@@ -96,6 +101,8 @@ class Basic(customtkinter.CTkFrame):
         self.widget_key_box = customtkinter.CTkEntry(self.key_frame, placeholder_text = "Key", font = ("TkDefaultFont", 20), width = 400, textvariable = self.key)
         self.widget_key_box.grid(row = 0, column = 1, padx = 5, sticky = "nsw")
 
+        self.widget_graph_button = customtkinter.CTkButton(self.key_frame, text = "Frequency Analysis", command = self.show_frequency_graph, font = ("TkDefaultFont", 20))
+        self.widget_graph_button.grid(row = 0, column = 2, padx = 5, sticky = "nsew")
         
         self.text_out_label = customtkinter.CTkLabel(self, text = "Encrypted Text Out:", font = ("TkDefaultFont", 15))
         self.widget_text_out = customtkinter.CTkTextbox(self, wrap = "word")
@@ -141,6 +148,27 @@ class Basic(customtkinter.CTkFrame):
 
         self.widget_text_in.delete(0.0, 'end')
         self.widget_text_in.insert(0.0, plain_text)
+
+    def get_graph_values(self, text):
+        self.alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
+        values = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+        for char in text:
+            try:
+                char_index = self.alphabet.index(char)
+                values[char_index] += 1
+            except: pass # Triggered when item is not in the list (emoji, \n, etc.)
+
+        return values
+    
+    def show_frequency_graph(self):
+        encrypted_text = self.widget_text_out.get(0.0, 'end')
+        letter_values = self.get_graph_values(encrypted_text)
+        plt.figure(figsize = (15,5))
+        plt.bar(self.alphabet, letter_values)
+        
+
+        plt.show()
 
 class Notepad(customtkinter.CTkFrame):
     """
