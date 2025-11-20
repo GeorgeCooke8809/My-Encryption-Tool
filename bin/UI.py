@@ -35,7 +35,7 @@ class MasterFrame(customtkinter.CTkFrame):
         self.widget_menu_buttons = customtkinter.CTkSegmentedButton(self, values = ["Directional Caesar", "Directional Polyshift", "Vernam", "Notepad"], command  = self.switch_page, font = ("TkDefaultFont", 20))
         self.widget_menu_buttons.set("Directional Caesar")
 
-        self.widget_learn_more = customtkinter.CTkButton(self, text = "Learn More", font = ("TkDefaultFont", 20), command = ...) # TODO: add command
+        self.widget_learn_more = customtkinter.CTkButton(self, text = "Learn More", font = ("TkDefaultFont", 20), command = self.learn_more_page) # TODO: add command
 
         self.content = Basic(self, "Directional Caesar")
 
@@ -48,7 +48,7 @@ class MasterFrame(customtkinter.CTkFrame):
         self.columnconfigure(1, weight = 1)
 
         self.widget_menu_buttons.grid(row = 0, column = 0, sticky = "nsw", padx = 10, pady = 10)
-        self.widget_learn_more.grid(row = 0, column = 1, sticky = "nsew")
+        self.widget_learn_more.grid(row = 0, column = 1, padx = 5, pady = 5, sticky = "nsew")
         self.content.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
 
     def switch_page(self, value = None): # Handles the logic of switching between different pages
@@ -59,6 +59,9 @@ class MasterFrame(customtkinter.CTkFrame):
             self.content = Basic(self, page)
         elif page == "Notepad":
             self.content = Notepad(self)
+
+    def learn_more_page(self):
+        LearnMore(self)
 
 class Basic(customtkinter.CTkFrame):
     """
@@ -308,6 +311,40 @@ class OpenFileKeyRequest(customtkinter.CTkToplevel):
 
         self.master.widget_encryption_type.set(encryption_type)
 
+        self.destroy()
+
+class LearnMore(customtkinter.CTkToplevel):
+    def __init__(self, master):
+        super().__init__()
+
+        self.title("Learn More")
+        self.geometry('500x225')
+        self.resizable(width = False, height = False)
+        self.wm_transient(master)
+
+        self.create_widgets()
+
+        self.mainloop()
+
+    def create_widgets(self):
+        self.frame = customtkinter.CTkFrame(self)
+        self.widget_info_label = customtkinter.CTkLabel(self.frame, text = "Symmetric encryption is the version of encryption in which the key to encrypt and decrypt is the same. In asymmetric encryption, the encryption and decryption key are different with users having public and private keys. The public key is used to encrypt the data but cannot be used to decrypt it. As such, the user will share their public key with the person who is sharing data with them and then use their own public key to decrypt it. This is secure because it does not matter if the public key is intercepted. The public key should not be shared at any point.", font = ("TkDefaultFont", 15), wraplength = 450)
+        self.widget_close = customtkinter.CTkButton(self.frame, text = "Close", font = ("TkDefaultFont", 15), command = self.close)
+
+        self.draw_widgets()
+
+    def draw_widgets(self):
+        self.frame.rowconfigure(0)
+        self.frame.rowconfigure(1)
+
+        self.frame.columnconfigure(0, weight = 1)
+
+        self.widget_info_label.grid(row = 0, column = 0, pady = 5, sticky = "nsew")
+        self.widget_close.grid(row = 1, column = 0, pady = 5, sticky = "nsew")
+
+        self.frame.pack(padx = 10, pady = 5, anchor = "center", expand = True, fill = "both")
+
+    def close(self):
         self.destroy()
 
 
