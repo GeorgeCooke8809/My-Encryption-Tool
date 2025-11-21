@@ -33,7 +33,7 @@ class MasterFrame(customtkinter.CTkFrame):
         self.pack(anchor = "center", expand = True, fill = "both")
 
     def create_widgets(self): # Make the widgets that will later be drawn to the window
-        self.widget_menu_buttons = customtkinter.CTkSegmentedButton(self, values = ["Directional Caesar", "Directional Polyshift", "Vernam", "Notepad"], command  = self.switch_page, font = ("TkDefaultFont", 20))
+        self.widget_menu_buttons = customtkinter.CTkSegmentedButton(self, values = ["Directional Caesar", "Directional Polyshift", "Vernam", "RSA", "Notepad"], command  = self.switch_page, font = ("TkDefaultFont", 20))
         self.widget_menu_buttons.set("Directional Caesar")
 
         self.widget_learn_more = customtkinter.CTkButton(self, text = "Learn More", font = ("TkDefaultFont", 20), command = self.learn_more_page) # TODO: add command
@@ -58,6 +58,8 @@ class MasterFrame(customtkinter.CTkFrame):
 
         if page in ["Directional Caesar", "Directional Polyshift", "Vernam"]:
             self.content = Basic(self, page)
+        elif page == "RSA":
+            self.content = RSA_Page(self)
         elif page == "Notepad":
             self.content = Notepad(self)
 
@@ -173,6 +175,92 @@ class Basic(customtkinter.CTkFrame):
         
 
         plt.show()
+
+class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and loading for when encrypting, generating keys, decrypting # TODO: split into three different classes, one for overall, and then one for each key frame
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        self.create_widgets()
+
+        self.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
+
+    def create_widgets(self):
+        self.key_frame = customtkinter.CTkFrame(self)
+
+        self.key_frame.rowconfigure((0,2), weight = 1)
+        self.key_frame.rowconfigure((1,3), weight = 1000)
+        self.key_frame.columnconfigure((0,1,2,3), weight = 1)
+
+        self.key_generation_label = customtkinter.CTkLabel(self.key_frame, text = "Generate Keys:", font = ("TkDefaultFont", 30, "bold"))
+        self.min_prime_label = customtkinter.CTkLabel(self.key_frame, text = "Minimum Prime:", font = ("TkDefaultFont", 15))
+        self.min_prime_entry = customtkinter.CTkEntry(self.key_frame, placeholder_text = "3", font = ("TkDefaultFont", 15))
+
+        self.max_prime_label = customtkinter.CTkLabel(self.key_frame, text = "Maximum Prime:", font = ("TkDefaultFont", 15))
+        self.max_prime_entry = customtkinter.CTkEntry(self.key_frame, placeholder_text = "997", font = ("TkDefaultFont", 15))
+
+        self.generate_key_button = customtkinter.CTkButton(self.key_frame, text = "Generate Key", font = ("TkDefaultFont", 15), command = self.generate_key)
+
+        self.public_key_label = customtkinter.CTkLabel(self.key_frame, text = "Public Key: ", font = ("TkDefaultFont", 15))
+        self.public_key_frame = customtkinter.CTkFrame(self.key_frame, fg_color = "transparent")
+        self.public_key_frame.rowconfigure(0, weight = 1)
+        self.public_key_frame.columnconfigure(0, weight = 1000)
+        self.public_key_frame.columnconfigure(1, weight = 1)
+        self.public_key_entry = customtkinter.CTkEntry(self.public_key_frame, placeholder_text = "Public Key", font = ("TkDefaultFont", 15), corner_radius = 0)
+        self.public_key_copy_button = customtkinter.CTkButton(self.public_key_frame, text = "Copy", corner_radius = 0, font = ("TkDefaultFont", 15)) # TODO: add command
+
+        self.n_label = customtkinter.CTkLabel(self.key_frame, text = "N: ", font = ("TkDefaultFont", 15))
+        self.n_frame = customtkinter.CTkFrame(self.key_frame, fg_color = "transparent")
+        self.n_frame.rowconfigure(0, weight = 1)
+        self.n_frame.columnconfigure(0, weight = 1000)
+        self.n_frame.columnconfigure(1, weight = 1)
+        self.n_entry = customtkinter.CTkEntry(self.n_frame, placeholder_text = "N", font = ("TkDefaultFont", 15), corner_radius = 0)
+        self.n_copy_button = customtkinter.CTkButton(self.n_frame, text = "Copy", corner_radius = 0, font = ("TkDefaultFont", 15)) # TODO: add command
+
+        self.private_key_label = customtkinter.CTkLabel(self.key_frame, text = "Private Key: ", font = ("TkDefaultFont", 15))
+        self.private_key_frame = customtkinter.CTkFrame(self.key_frame, fg_color = "transparent")
+        self.private_key_frame.rowconfigure(0, weight = 1)
+        self.private_key_frame.columnconfigure(0, weight = 1000)
+        self.private_key_frame.columnconfigure(1, weight = 1)
+        self.private_key_entry = customtkinter.CTkEntry(self.private_key_frame, placeholder_text = "Private Key", font = ("TkDefaultFont", 15), corner_radius = 0)
+        self.private_key_copy_button = customtkinter.CTkButton(self.private_key_frame, text = "Copy", corner_radius = 0, font = ("TkDefaultFont", 15)) # TODO: add command
+
+        self.encryption_frame = customtkinter.CTkFrame(self)
+
+        self.draw_widgets()
+
+    def draw_widgets(self):
+        self.rowconfigure(0, weight = 1)
+        self.rowconfigure(1, weight = 1000)
+        self.columnconfigure(0, weight = 1)
+
+        self.key_generation_label.grid(row = 0, column = 0, columnspan = 4, sticky = "nsw", padx = 10, pady = 5)
+
+        self.min_prime_label.grid(row = 1, column = 0, columnspan = 1, sticky = "nsw", padx = 10, pady = 5)
+        self.min_prime_entry.grid(row = 1, column = 1, columnspan = 1, sticky = "nsew", padx = 10, pady = 5)
+        self.max_prime_label.grid(row = 2, column = 0, columnspan = 1, sticky = "nsw", padx = 10, pady = 5)
+        self.max_prime_entry.grid(row = 2, column = 1, columnspan = 1, sticky = "nsew", padx = 10, pady = 5)
+
+        self.generate_key_button.grid(row = 3, column = 0, columnspan = 2, sticky = "nsew", padx = 10, pady = 5)
+
+        self.public_key_label.grid(row = 1, column = 2, columnspan = 1, sticky = "nsw", padx = 10, pady = 5)
+        self.public_key_entry.grid(row = 0, column = 0, columnspan = 1, sticky = "nsew")
+        self.public_key_copy_button.grid(row = 0, column = 1, columnspan = 1, sticky = "nsew")
+        self.public_key_frame.grid(row = 1, column = 3, columnspan = 1, sticky = "nsew", padx = 10, pady = 5)
+
+        self.n_label.grid(row = 2, column = 2, columnspan = 1, sticky = "nsw", padx = 10, pady = 5)
+        self.n_entry.grid(row = 0, column = 0, columnspan = 1, sticky = "nsew")
+        self.n_copy_button.grid(row = 0, column = 1, columnspan = 1, sticky = "nsew")
+        self.n_frame.grid(row = 2, column = 3, columnspan = 1, sticky = "nsew", padx = 10, pady = 5)
+
+        self.private_key_label.grid(row = 3, column = 2, columnspan = 1, sticky = "nsw", padx = 10, pady = 5)
+        self.private_key_entry.grid(row = 0, column = 0, columnspan = 1, sticky = "nsew")
+        self.private_key_copy_button.grid(row = 0, column = 1, columnspan = 1, sticky = "nsew")
+        self.private_key_frame.grid(row = 3, column = 3, columnspan = 1, sticky = "nsew", padx = 10, pady = 5)
+
+        self.key_frame.grid(row = 0, column = 0, columnspan = 1, padx = 10, pady = 10, sticky = "nsew")
+
+    def generate_key(self):
+        pass
 
 class Notepad(customtkinter.CTkFrame):
     """
