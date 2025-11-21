@@ -5,6 +5,8 @@ from matplotlib import pyplot as plt
 import Encryption  
 import RSAEncryption
 
+#TODO: add spacing rows in sandbox pages
+
 class App(customtkinter.CTk):
     """
     This class is used to make the main window within which the rest of the app is housed.
@@ -206,7 +208,7 @@ class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and lo
         self.public_key_frame.columnconfigure(0, weight = 1000)
         self.public_key_frame.columnconfigure(1, weight = 1)
         self.public_key_entry = customtkinter.CTkEntry(self.public_key_frame, placeholder_text = "Public Key", font = ("TkDefaultFont", 15), corner_radius = 0)
-        self.public_key_copy_button = customtkinter.CTkButton(self.public_key_frame, text = "Copy", corner_radius = 0, font = ("TkDefaultFont", 15)) # TODO: add command
+        self.public_key_copy_button = customtkinter.CTkButton(self.public_key_frame, text = "Copy", corner_radius = 0, font = ("TkDefaultFont", 15), command = lambda: self.copy_key("public"))
 
         self.n_label = customtkinter.CTkLabel(self.key_frame, text = "N: ", font = ("TkDefaultFont", 15))
         self.n_frame = customtkinter.CTkFrame(self.key_frame, fg_color = "transparent")
@@ -214,7 +216,7 @@ class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and lo
         self.n_frame.columnconfigure(0, weight = 1000)
         self.n_frame.columnconfigure(1, weight = 1)
         self.n_entry = customtkinter.CTkEntry(self.n_frame, placeholder_text = "N", font = ("TkDefaultFont", 15), corner_radius = 0)
-        self.n_copy_button = customtkinter.CTkButton(self.n_frame, text = "Copy", corner_radius = 0, font = ("TkDefaultFont", 15)) # TODO: add command
+        self.n_copy_button = customtkinter.CTkButton(self.n_frame, text = "Copy", corner_radius = 0, font = ("TkDefaultFont", 15), command = lambda: self.copy_key("n"))
 
         self.private_key_label = customtkinter.CTkLabel(self.key_frame, text = "Private Key: ", font = ("TkDefaultFont", 15))
         self.private_key_frame = customtkinter.CTkFrame(self.key_frame, fg_color = "transparent")
@@ -222,9 +224,19 @@ class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and lo
         self.private_key_frame.columnconfigure(0, weight = 1000)
         self.private_key_frame.columnconfigure(1, weight = 1)
         self.private_key_entry = customtkinter.CTkEntry(self.private_key_frame, placeholder_text = "Private Key", font = ("TkDefaultFont", 15), corner_radius = 0)
-        self.private_key_copy_button = customtkinter.CTkButton(self.private_key_frame, text = "Copy", corner_radius = 0, font = ("TkDefaultFont", 15)) # TODO: add command
+        self.private_key_copy_button = customtkinter.CTkButton(self.private_key_frame, text = "Copy", corner_radius = 0, font = ("TkDefaultFont", 15), command = lambda: self.copy_key("private"))
 
         self.encryption_frame = customtkinter.CTkFrame(self)
+        self.encryption_frame.rowconfigure((1,4), weight = 1000)
+        self.encryption_frame.rowconfigure((0,2,3), weight = 1)
+        self.encryption_frame.columnconfigure((0,1), weight = 1)
+
+        self.plain_text_label = customtkinter.CTkLabel(self.encryption_frame, text = "Plain Text In:", font = ("TkDefaultFont", 30))
+        self.plain_text_box = customtkinter.CTkTextbox(self.encryption_frame, font = ("TkDefaultFont", 20), wrap = "word")
+        self.encrypt_button = customtkinter.CTkButton(self.encryption_frame, text = "Encrypt", font = ("TkDefaultFont", 20), command = self.encrypt)
+        self.decrypt_button = customtkinter.CTkButton(self.encryption_frame, text = "Decrypt", font = ("TkDefaultFont", 20), command = self.decrypt)
+        self.cypher_text_label = customtkinter.CTkLabel(self.encryption_frame, text = "Cypher Text Out:", font = ("TkDefaultFont", 30))
+        self.cypher_text_box = customtkinter.CTkTextbox(self.encryption_frame, font = ("TkDefaultFont", 20), wrap = "word")
 
         self.draw_widgets()
 
@@ -257,10 +269,57 @@ class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and lo
         self.private_key_copy_button.grid(row = 0, column = 1, columnspan = 1, sticky = "nsew")
         self.private_key_frame.grid(row = 3, column = 3, columnspan = 1, sticky = "nsew", padx = 10, pady = 5)
 
-        self.key_frame.grid(row = 0, column = 0, columnspan = 1, padx = 10, pady = 10, sticky = "nsew")
+        self.key_frame.grid(row = 0, column = 0, columnspan = 1, padx = 10, pady = 5, sticky = "nsew")
+
+        self.plain_text_label.grid(row = 0, column = 0, columnspan = 2, padx = 10, pady = 5, sticky = "nsw")
+        self.plain_text_box.grid(row = 1, column = 0, columnspan = 2, padx = 10, pady = 5, sticky = "nsew")
+        self.encrypt_button.grid(row = 2, column = 0, columnspan = 1, padx = 10, pady = 5, sticky = "nsew")
+        self.decrypt_button.grid(row = 2, column = 1, columnspan = 1, padx = 10, pady = 5, sticky = "nsew")
+        self.cypher_text_label.grid(row = 3, column = 0, columnspan = 2, padx = 10, pady = 5, sticky = "nsw")
+        self.cypher_text_box.grid(row = 4, column = 0, columnspan = 2, padx = 10, pady = 5, sticky = "nsew")
+
+        self.encryption_frame.grid(row = 1, column = 0, columnspan = 1, padx = 10, pady = 5, sticky = "nsew")
 
     def generate_key(self):
-        pass
+        try:
+            min_prime = int(self.min_prime_entry.get())
+        except: min_prime = 3
+        try:
+            max_prime = int(self.max_prime_entry.get())
+        except: max_prime = 973
+
+        keys = RSAEncryption.generate_keys(min_prime, max_prime)
+
+        public_key = keys[0]
+        n = keys[1]
+        private_key = keys[2] # TODO: add loading screen
+
+        self.public_key_entry.delete(0, "end")
+        self.public_key_entry.insert(0, public_key)
+
+        self.n_entry.delete(0, "end")
+        self.n_entry.insert(0, n)
+
+        self.private_key_entry.delete(0, "end")
+        self.private_key_entry.insert(0, private_key)
+
+    def copy_key(self, key_type: str):
+        if key_type == "public":
+            pass
+        elif key_type == "n":
+            pass
+        elif key_type == "private":
+            pass
+
+    def encrypt(self):
+        public_key = self.public_key_entry.get()
+        n = self.n_entry.get()
+        plain = self.plain_text_box.get(0.0, "end")
+
+    def decrypt(self):
+        private_key = self.private_key_entry.get()
+        n = self.n_entry.get()
+        cypher = self.cypher_text_box.get(0.0, "end")
 
 class Notepad(customtkinter.CTkFrame):
     """
