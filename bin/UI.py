@@ -179,7 +179,7 @@ class Basic(customtkinter.CTkFrame):
 
         plt.show()
 
-class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and loading for when encrypting, generating keys, decrypting # TODO: split into three different classes, one for overall, and then one for each key frame
+class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and loading for when encrypting, generating keys, decrypting
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -188,6 +188,20 @@ class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and lo
         self.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
 
     def create_widgets(self):
+        self.create_key_frame()
+        self.create_inputs_frame()
+
+        self.draw_widgets()
+
+    def draw_widgets(self):
+        self.rowconfigure(0, weight = 1)
+        self.rowconfigure(1, weight = 1000)
+        self.columnconfigure(0, weight = 1)
+        
+        self.draw_key()
+        self.draw_inputs()
+
+    def create_key_frame(self):
         self.key_frame = customtkinter.CTkFrame(self)
 
         self.key_frame.rowconfigure((0,2), weight = 1)
@@ -227,6 +241,7 @@ class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and lo
         self.private_key_entry = customtkinter.CTkEntry(self.private_key_frame, placeholder_text = "Private Key", font = ("TkDefaultFont", 15), corner_radius = 0)
         self.private_key_copy_button = customtkinter.CTkButton(self.private_key_frame, text = "Copy", corner_radius = 0, font = ("TkDefaultFont", 15), command = lambda: self.copy_key("private"))
 
+    def create_inputs_frame(self):
         self.encryption_frame = customtkinter.CTkFrame(self)
         self.encryption_frame.rowconfigure((1,4), weight = 1000)
         self.encryption_frame.rowconfigure((0,2,3), weight = 1)
@@ -239,13 +254,7 @@ class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and lo
         self.cypher_text_label = customtkinter.CTkLabel(self.encryption_frame, text = "Cypher Text Out:", font = ("TkDefaultFont", 30))
         self.cypher_text_box = customtkinter.CTkTextbox(self.encryption_frame, font = ("TkDefaultFont", 20), wrap = "word")
 
-        self.draw_widgets()
-
-    def draw_widgets(self):
-        self.rowconfigure(0, weight = 1)
-        self.rowconfigure(1, weight = 1000)
-        self.columnconfigure(0, weight = 1)
-
+    def draw_key(self):
         self.key_generation_label.grid(row = 0, column = 0, columnspan = 4, sticky = "nsw", padx = 10, pady = 5)
 
         self.min_prime_label.grid(row = 1, column = 0, columnspan = 1, sticky = "nsw", padx = 10, pady = 5)
@@ -272,6 +281,7 @@ class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and lo
 
         self.key_frame.grid(row = 0, column = 0, columnspan = 1, padx = 10, pady = 5, sticky = "nsew")
 
+    def draw_inputs(self):
         self.plain_text_label.grid(row = 0, column = 0, columnspan = 2, padx = 10, pady = 5, sticky = "nsw")
         self.plain_text_box.grid(row = 1, column = 0, columnspan = 2, padx = 10, pady = 5, sticky = "nsew")
         self.encrypt_button.grid(row = 2, column = 0, columnspan = 1, padx = 10, pady = 5, sticky = "nsew")
