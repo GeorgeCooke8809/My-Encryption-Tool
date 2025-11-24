@@ -28,7 +28,7 @@ def generate_keys(min_prime: int = 3, max_prime: int = 997):
             
 
 def encrypt(text: str, public_key: int, n: int):
-    alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
+    alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£$%^&*()]")
     encrypted = ""
 
     for i in text:
@@ -41,7 +41,7 @@ def encrypt(text: str, public_key: int, n: int):
     return encrypted
 
 def decrypt(cypher: int, private_key: int, n: int):
-    alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
+    alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£$%^&*()")
     cypher = cypher.split()
     plain_text = ""
 

@@ -4,6 +4,7 @@ from tkinter import *
 from matplotlib import pyplot as plt
 import Encryption  
 import RSAEncryption
+import pyperclip
 
 #TODO: add spacing rows in sandbox pages
 
@@ -305,21 +306,31 @@ class RSA_Page(customtkinter.CTkFrame): # TODO: add RSA encryption window and lo
 
     def copy_key(self, key_type: str):
         if key_type == "public":
-            pass
+            pyperclip.copy(self.public_key_entry.get())  
         elif key_type == "n":
-            pass
+            pyperclip.copy(self.n_entry.get())  
         elif key_type == "private":
-            pass
+            pyperclip.copy(self.private_key_entry.get())  
 
     def encrypt(self):
-        public_key = self.public_key_entry.get()
-        n = self.n_entry.get()
+        public_key = int(self.public_key_entry.get())
+        n = int(self.n_entry.get())
         plain = self.plain_text_box.get(0.0, "end")
 
+        cypher = RSAEncryption.encrypt(plain, public_key, n)
+
+        self.cypher_text_box.delete(0.0, "end")
+        self.cypher_text_box.insert(0.0, cypher)
+
     def decrypt(self):
-        private_key = self.private_key_entry.get()
-        n = self.n_entry.get()
+        private_key = int(self.private_key_entry.get())
+        n = int(self.n_entry.get())
         cypher = self.cypher_text_box.get(0.0, "end")
+
+        plain = RSAEncryption.decrypt(cypher, private_key, n)
+
+        self.plain_text_box.delete(0.0, "end")
+        self.plain_text_box.insert(0.0, plain)
 
 class Notepad(customtkinter.CTkFrame):
     """

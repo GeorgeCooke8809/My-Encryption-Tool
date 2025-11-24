@@ -31,9 +31,9 @@ def decrypt(encrypted_text: str, encryption_key: str, level: str):
     return plain_text
 
 def encrypt_alphabet(direction: str, amount: int):
-    plain_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
+    plain_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£$%^&*()")
 
-    amount = amount % 88
+    amount = amount % 87
     new_alphabet = []
     new_alphabet.extend(plain_alphabet)
 
@@ -49,7 +49,7 @@ def encrypt_alphabet(direction: str, amount: int):
     return new_alphabet
 
 def level_one_convert(text_in: str, key: str):
-    """
+    """  
     Also called "Directional Caesar"
 
     PROCESS caesar convert (plain text, encryption key)
@@ -64,7 +64,7 @@ def level_one_convert(text_in: str, key: str):
         PRINT encrypted text
     END
     """
-    plain_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
+    plain_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£$%^&*()")
 
     try:
         encryption_direction = key[0]
@@ -103,7 +103,7 @@ def level_two_convert(text_in: str, key: str):
     END
     """
     index = 0
-    plain_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
+    plain_alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£$%^&*()")
 
     encrypted_text = ""
 
@@ -150,7 +150,7 @@ def vernam_toggle(plain: str, key: str):
     """
     if key == "":
         key = "a"
-    alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£4%^&*()]")
+    alphabet = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ .,<>/;:'@][-_=+1234567890!£$%^&*()")
     cypher = ""
 
     length_plain = len(plain)
