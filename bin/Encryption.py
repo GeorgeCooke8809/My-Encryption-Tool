@@ -107,10 +107,14 @@ def level_two_convert(text_in: str, key: str):
 
     encrypted_text = ""
 
-    if key not in ("L", "R"):
+    try:
         encryption_direction = key[0]
-        key_number = key[1:]
-    else:
+
+        if key_number.isnumeric():
+            key_number = key[1:]
+        else:
+            key_number = "0"
+    except:
         encryption_direction = "L"
         key_number = "0"
 
