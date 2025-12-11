@@ -52,7 +52,7 @@ class MasterFrame(customtkinter.CTkFrame):
         self.columnconfigure(1, weight = 1)
 
         self.widget_menu_buttons.grid(row = 0, column = 0, sticky = "nsw", padx = 10, pady = 10)
-        self.widget_learn_more.grid(row = 0, column = 1, padx = 5, pady = 5, sticky = "nsew")
+        self.widget_learn_more.grid(row = 0, column = 1, padx = 10, pady = 10, sticky = "nsew")
         self.content.grid(row=1, column = 0, columnspan = 2, rowspan = 1, sticky = "nsew")
 
     def switch_page(self, value = None): # Handles the logic of switching between different pages
