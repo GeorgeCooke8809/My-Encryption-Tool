@@ -28,7 +28,7 @@ python3 -m pip install customtkinter
 pip3 install customtkinter
 ```
 One should use the same commands to install PyperClip and MatPlotLib.
-Having installed the prerequisites, the file "Encryption Tool" can be double clicked and run. To view the code, open it in your IDE of choice.
+Having installed the prerequisites, the file "Encryption Tool" can be double clicked and run. Failing that, one can go into the bin folder and open "UI.py" or "UI.pyw". To view the code, open it in your IDE of choice.
 
 ## Usage:
 Pages can be navigated through the menu at the top of the window. Pages are as follows: Directional Caesar, Vernam, Directional Polyshift, and Notepad. The levels one and two pages act as playgrounds for experimentation with the encryption engine; plain text should be inputted in the topmost box of the page with the encryption key in the middle. Encrypted text will then be outputted in the bottom most box. Keys for the Directional Caesar and Directional Polyshift should start with either the capital letter "L" or the capital letter "R" and then be followed by a string of integers. To decrypt encrypted text, copy the encrypted text in to the encrypted text out box in the relevant encryption level page and insert the key into the key box. Keys for the Vernam cypher can be any string of characters on teh keyboard. Keys for the RSA encryption can be entered or generated for you.
