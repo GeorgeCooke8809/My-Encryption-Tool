@@ -50,8 +50,14 @@ The Vernam cypher works by getting the character and key indexes for each charac
 RSA encryption is still widely used today and is incredibly helpful in the World Wide Web. While explaining how it works is outside of the scope of this document, one can watch the following video for more information: [https://youtu.be/D_PfV_IcUdA?si=wOWvVncgWrH94rx-]. To use the RSA encryption, a user can input or generate their keys at the top of the window and then encrypt/decrypt messages as they please. When generating the keys, a user can change the minimum and maximum prime numbers generated to create the keys. Higher numbers are more secure but rrequire considerably more processing. Please note that there is likely to be considerable lag with longer messages and keys.
 
 ## Screenshot Gallery:
+<img width="1244" height="783" alt="Screenshot 2025-12-12 091332" src="https://github.com/user-attachments/assets/8193e37a-3db9-4510-8b64-77e6b5de3ea2" />
 
-<img width="602" height="380" alt="image" src="https://github.com/user-attachments/assets/cc091b99-26a0-454a-8182-8968a4010a40" />
 
-<img width="602" height="380" alt="image" src="https://github.com/user-attachments/assets/a4546f70-83fb-44ed-8c1f-c07d22770489" />
+<img width="1240" height="781" alt="Screenshot 2025-12-12 092130" src="https://github.com/user-attachments/assets/538b5a06-b9ab-4f90-af7f-2dc19a97cd08" />
+
+
+<img width="1238" height="778" alt="Screenshot 2025-12-12 092248" src="https://github.com/user-attachments/assets/7a031650-4f9a-4de8-b2a5-a98e6c281bc9" />
+
+<img width="368" height="146" alt="Screenshot 2025-12-12 092432" src="https://github.com/user-attachments/assets/302b2774-ad7a-4bb3-ae2f-a201e0aefe18" />
+
 
