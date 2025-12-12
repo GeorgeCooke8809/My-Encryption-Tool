@@ -6,8 +6,6 @@ import Encryption
 import RSAEncryption
 import pyperclip
 
-#TODO: add spacing rows in sandbox pages
-
 class App(customtkinter.CTk):
     """
     This class is used to make the main window within which the rest of the app is housed.
@@ -97,9 +95,7 @@ class Basic(customtkinter.CTkFrame):
         self.widget_text_in.bind('<KeyRelease>', self.input_change)
 
         self.key_frame = customtkinter.CTkFrame(self, fg_color = "transparent")
-        self.key_frame.columnconfigure(0)
-        self.key_frame.columnconfigure(1)
-        self.key_frame.columnconfigure(3)
+        self.key_frame.columnconfigure((0,1,2), weight = 1)
 
         self.key_label = customtkinter.CTkLabel(self.key_frame, text = "Key:", font = ("TkDefaultFont", 15))
         self.key_label.grid(row = 0, column = 0, columnspan = 1, sticky = "nse", padx = 5)
@@ -120,12 +116,10 @@ class Basic(customtkinter.CTkFrame):
         self.draw_widgets()
 
     def draw_widgets(self): # Draws the widgets and displays them on the window
-        self.rowconfigure(0, weight = 1, minsize = 40)
-        self.rowconfigure(1, weight = 1, minsize = 15)
-        self.rowconfigure(2, weight = 100000, minsize = 40)
-        self.rowconfigure(3, weight = 2, minsize = 20)
-        self.rowconfigure(4, weight = 1, minsize = 15)
-        self.rowconfigure(5, weight = 100000, minsize = 40)
+        self.rowconfigure((0,3), weight = 10, minsize = 40)
+        self.rowconfigure((1,4), weight = 10, minsize = 15)
+        self.rowconfigure((2,5), weight = 100000, minsize = 40)
+        self.rowconfigure(6, weight = 1, minsize = 15)
 
         self.columnconfigure(0, weight = 1)
 
